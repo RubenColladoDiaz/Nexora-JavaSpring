@@ -43,16 +43,4 @@ public class UserController {
     public void delete(@PathVariable Long id) {
         userService.delete(id);
     }
-
-    @PostMapping("/register")
-    public void register(@RequestBody String name, @RequestBody String email, @RequestBody String password){
-        User newUser = new User();
-        String hashedPassword = userService.hashPassword(password);
-
-        newUser.setName(name);
-        newUser.setEmail(email);
-        newUser.setPassword(hashedPassword);
-
-        userService.save(newUser);
-    }
 }
