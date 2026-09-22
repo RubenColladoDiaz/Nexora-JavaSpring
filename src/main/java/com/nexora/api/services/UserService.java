@@ -19,10 +19,12 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final JwtService jwtService;
 
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, JwtService jwtService) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.jwtService = jwtService;
     }
 
     public List<User> findAll(){
@@ -62,7 +64,8 @@ public class UserService {
         user.setPassword(hashPassword(request.password()));
 
         User saved = userRepository.save(user);
-        return new UserResponse(saved.getId(), saved.getName(), saved.getEmail());
+        String token = jwtService.generateToken(user.getName());
+        return new UserResponse(saved.getId(), saved.getName(), saved.getEmail(), token);
     }
 
     @Transactional
@@ -74,6 +77,7 @@ public class UserService {
         if(!checkPassword(request.password(), loggedUser.getPassword()))
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Password is not correct");
 
-        return new UserResponse(loggedUser.getId(), loggedUser.getName(), loggedUser.getEmail());
+        String token = jwtService.generateToken(request.name());
+        return new UserResponse(loggedUser.getId(), loggedUser.getName(), loggedUser.getEmail(), token);
     }
 }
