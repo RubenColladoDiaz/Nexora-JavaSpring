@@ -2,6 +2,10 @@ package com.nexora.api.controllers;
 
 import com.nexora.api.entities.Product;
 import com.nexora.api.services.ProductService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,8 +22,15 @@ public class ProductController {
     }
 
     @GetMapping
-    public List<Product> findAll() {
-        return productService.findAll();
+    public Page<Product> findAll(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "id") String sort
+    ) {
+
+        Pageable pageable = PageRequest.of(page, size, Sort.by(sort));
+
+        return productService.findAll(pageable);
     }
 
     @GetMapping("/{id}")
@@ -41,5 +52,20 @@ public class ProductController {
     @DeleteMapping("/{id}")
     public void delete(@PathVariable Long id) {
         productService.delete(id);
+    }
+
+    @GetMapping("/search{name}")
+    public Optional<Product> findByName(@PathVariable String name){
+        return productService.findByName(name);
+    }
+
+    @GetMapping("/category/{id}")
+    public List<Product> findByCategoryId(@PathVariable Long id){
+        return productService.findByCategoryId(id);
+    }
+
+    @GetMapping("/{minPrice}{maxPrice}")
+    public List<Product> findByPriceBetween(double minPrice, double maxPrice){
+        return productService.findByPriceBetween(minPrice, maxPrice);
     }
 }
