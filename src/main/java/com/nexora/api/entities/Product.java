@@ -2,8 +2,11 @@ package com.nexora.api.entities;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.validator.constraints.URL;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +21,7 @@ public class Product {
     private Long id;
 
     @Column(unique = true, nullable = false)
+    @NotBlank(message = "Name is required")
     private String name;
 
     @Column(nullable = false)
@@ -32,6 +36,7 @@ public class Product {
     private int stock = 0;
 
     @Column
+    @URL
     private String image;
 
     @OneToMany(mappedBy = "product")

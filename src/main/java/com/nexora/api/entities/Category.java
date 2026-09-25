@@ -1,6 +1,7 @@
 package com.nexora.api.entities;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -17,6 +18,7 @@ public class Category {
     private Long id;
 
     @Column(unique = true, nullable = false)
+    @NotBlank(message = "Name is required")
     private String name;
 
     @OneToMany(mappedBy = "category")

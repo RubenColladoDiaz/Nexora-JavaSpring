@@ -54,8 +54,8 @@ public class ProductController {
         productService.delete(id);
     }
 
-    @GetMapping("/search{name}")
-    public Optional<Product> findByName(@PathVariable String name){
+    @GetMapping("/search")
+    public Optional<Product> findByName(@RequestParam String name){
         return productService.findByName(name);
     }
 
@@ -64,8 +64,8 @@ public class ProductController {
         return productService.findByCategoryId(id);
     }
 
-    @GetMapping("/{minPrice}{maxPrice}")
-    public List<Product> findByPriceBetween(double minPrice, double maxPrice){
+    @GetMapping("/find/price")
+    public List<Product> findByPriceBetween(@RequestParam double minPrice, @RequestParam double maxPrice){
         return productService.findByPriceBetween(minPrice, maxPrice);
     }
 }
