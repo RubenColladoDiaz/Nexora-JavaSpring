@@ -1,6 +1,7 @@
 package com.nexora.api.services;
 
 import com.nexora.api.entities.Product;
+import com.nexora.api.exceptions.ProductNotFoundException;
 import com.nexora.api.repositories.ProductRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -22,8 +23,11 @@ public class ProductService {
         return productRepository.findAll(pageable);
     }
 
-    public Optional<Product> findById(Long id){
-        return productRepository.findById(id);
+    public Product findById(Long id){
+        Optional<Product> product = productRepository.findById(id);
+        if(product.isEmpty())
+            throw new ProductNotFoundException("Product not found");
+        return product.get();
     }
 
     public Product save(Product product){
