@@ -1,7 +1,7 @@
 package com.nexora.api.services;
 
 import com.nexora.api.entities.Product;
-import com.nexora.api.exceptions.ProductNotFoundException;
+import com.nexora.api.exceptions.ResourceNotFoundException;
 import com.nexora.api.repositories.ProductRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -24,10 +24,7 @@ public class ProductService {
     }
 
     public Product findById(Long id){
-        Optional<Product> product = productRepository.findById(id);
-        if(product.isEmpty())
-            throw new ProductNotFoundException("Product not found");
-        return product.get();
+        return getProduct(id);
     }
 
     public Product save(Product product){
@@ -35,6 +32,7 @@ public class ProductService {
     }
 
     public void delete(Long id){
+        getProduct(id);
         productRepository.deleteById(id);
     }
 
@@ -48,5 +46,12 @@ public class ProductService {
 
     public List<Product> findByPriceBetween(double minPrice, double maxPrice){
         return productRepository.findByPriceBetween(minPrice, maxPrice);
+    }
+
+    private Product getProduct(Long id){
+        Optional<Product> product = productRepository.findById(id);
+        if(product.isEmpty())
+            throw new ResourceNotFoundException("Product not found");
+        return product.get();
     }
 }
