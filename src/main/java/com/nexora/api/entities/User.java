@@ -44,6 +44,10 @@ public class User {
     @OneToMany(mappedBy = "user")
     private List<Order> orders = new ArrayList<>();
 
+    @OneToOne
+    @JoinColumn(name = "shoppingCart_id")
+    private ShoppingCart shoppingCart;
+
     public User(){}
 
     @Override
