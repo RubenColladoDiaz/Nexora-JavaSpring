@@ -32,4 +32,12 @@ public class ShoppingCartItem {
     @ManyToOne
     @JoinColumn(name = "shoppingCart_id")
     private ShoppingCart shoppingCart;
+
+    @Override
+    public String toString() {
+        return "ShoppingCartItem{" +
+                "id=" + id +
+                ", quantity=" + quantity +
+                '}';
+    }
 }
